@@ -13,12 +13,12 @@ st.subheader(f"{option} for the next {days} days in {place}")
 
 if place:
     try:
-        # Get the temperature/sky data
+        # Get the temperature/sky data and dates
         filtered_data = get_data(place, days)
+        dates = [dict["dt_txt"] for dict in filtered_data]
 
         if option == "Temperature":
-            temperatures = [dict["main"]["temp"]/10 for dict in filtered_data]
-            dates = [dict["dt_txt"] for dict in filtered_data]
+            temperatures = [dict["main"]["temp"]-273.15 for dict in filtered_data]            
             # Create a temperature plot
             figure = px.line(x=dates, y=temperatures, 
                             labels={"x": "Date", "y": "Temperatures (C)"})
@@ -29,6 +29,6 @@ if place:
                     "Rain": "images/rain.png", "Snow": "images/snow.png"}
             sky_contitions = [dict["weather"][0]["main"] for dict in filtered_data]
             imaages_paths = [images[condition] for condition in sky_contitions]
-            st.image(imaages_paths, width=115)
+            st.image(imaages_paths, caption=dates, width=115)
     except KeyError:
         st.info("The place doesn't exist")
