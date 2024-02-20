@@ -1,7 +1,8 @@
 import requests
+from streamlit import secrets
 import os
 
-API_KEY = os.getenv("WEATHER_API_KEY")
+API_KEY = secrets["WEATHER_API_KEY"]
 
 
 def get_data(place, forecast_days):
